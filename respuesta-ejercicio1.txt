@@ -1,0 +1,39 @@
+import os
+import hashlib
+
+ruta="...archivos"
+ruta_hash="...hashs-files.txt"
+archivos=os.listdir(ruta)
+
+def file_hash(filename):
+   # make a hash object
+   h = hashlib.md5()
+
+   # open the file for reading in binary mode
+   with open(filename,'rb') as file:
+
+       # loop till the end of the file
+       chunk = 0
+       while chunk != b'':
+           # read only 1024 bytes at a time
+           chunk = file.read(1024)
+           h.update(chunk)
+
+   # return the hex representation of digest
+   return h.hexdigest()
+
+
+for txt in archivos:
+    ruta_eval=ruta+"\\"+txt
+    hash_val = file_hash(ruta_eval)
+    with open(ruta_hash, 'r') as file:
+        line = file.readline()
+        while line:
+            #print(line)
+            fhash,nfile=line.split()
+            if nfile==txt:
+                if fhash==hash_val:
+                    print(nfile,"No ha sido alterado")
+                else:
+                    print(nfile,"Ha sido alterado")
+            line = file.readline()
